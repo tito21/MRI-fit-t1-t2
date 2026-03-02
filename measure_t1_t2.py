@@ -16,9 +16,8 @@ import pathlib
 
 import numpy as np
 import pydicom
-from scipy.optimize import curve_fit, check_grad
+from scipy.optimize import curve_fit
 from skimage.filters import threshold_otsu
-from skimage.util import montage
 import matplotlib.pyplot as plt
 import tqdm
 
@@ -186,6 +185,8 @@ def plot_montage(images, titles, rows=None, cols=None):
     for i in range(len(images)):
         axes[i].imshow(images[i], cmap='gray', vmin=vmin, vmax=vmax)
         axes[i].set_title(titles[i])
+        axes[i].axis('off')
+    for i in range(len(images), len(axes)):
         axes[i].axis('off')
     plt.tight_layout()
     return fig
