@@ -199,15 +199,16 @@ if __name__ == '__main__':
     parser.add_argument('--mode', choices=['T1', 'T2'], default='T1', help='Relaxation type to measure')
     parser.add_argument('--output', type=pathlib.Path, default='.', help='Output path for the numpy arrays')
     parser.add_argument("--range", type=float, nargs=2, help="Display range for the relaxation map")
+    parser.add_argument('--debug', action='store_true', help='Show intermediate results for debugging')
     args = parser.parse_args()
 
     images, times = load_dicom_series(args.folder)
 
-
-    titles = [f'TI={t[0]} ms, TE={t[1]} ms' for t in times]
-    plot_montage(images, titles)
-    # plt.imshow(montage(images), cmap='gray')
-    plt.show()
+    if args.debug:
+        titles = [f'TI={t[0]} ms, TE={t[1]} ms' for t in times]
+        plot_montage(images, titles)
+        # plt.imshow(montage(images), cmap='gray')
+        plt.show()
 
     maps, residual_map, mask = fit_relaxation(images, times, mode=args.mode)
 
@@ -217,20 +218,22 @@ if __name__ == '__main__':
         display_range = T1_range if args.mode == 'T1' else T2_range
 
     # Save and show results
-    plt.imshow(residual_map, cmap='hot', vmax=np.percentile(residual_map, 99))  # Clip to 99th percentile for better visualization
-    plt.title('Residual map')
-    plt.colorbar()
-    plt.savefig(args.output / f'{args.mode}_residual_map.png', dpi=300)
-    plt.show()
+    if args.debug:
+        plt.imshow(residual_map, cmap='hot', vmax=np.percentile(residual_map, 99))  # Clip to 99th percentile for better visualization
+        plt.title('Residual map')
+        plt.colorbar()
+        plt.savefig(args.output / f'{args.mode}_residual_map.png', dpi=300)
+        plt.show()
 
-    plt.imshow(maps['s0_map'], cmap='gray')
-    plt.title('S0 map')
-    plt.colorbar()
-    plt.show()
+        plt.imshow(mask, cmap='gray')
+        plt.title('Mask')
+        plt.show()
 
-    plt.imshow(mask, cmap='gray')
-    plt.title('Mask')
-    plt.show()
+        if args.mode == 'T1':
+            plt.imshow(maps['k_map'], cmap='bwr', vmin=-1, vmax=1)
+            plt.title('k map')
+            plt.colorbar()
+            plt.show()
 
     np.savez(args.output / f'{args.mode}_map.npz', **maps, residual_map=residual_map, mask=mask)
     t_map = maps['t_map']
