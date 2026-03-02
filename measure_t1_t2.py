@@ -236,6 +236,7 @@ if __name__ == '__main__':
     t_map = maps['t_map']
     s0_map = maps['s0_map']
     s0_map[mask] = np.nan
+    t_map[mask] = np.nan
     plt.subplot(1, 2, 1)
     plt.imshow(t_map, cmap='hot')
     plt.clim(*display_range)
