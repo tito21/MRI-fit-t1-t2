@@ -252,5 +252,11 @@ if __name__ == '__main__':
     plt.tight_layout()
     plt.savefig(args.output / f'{args.mode}_map.png', dpi=300)
     plt.show()
+
+    plt.imshow(residual_map, cmap='hot', vmax=np.percentile(residual_map, 99))  # Clip to 99th percentile for better visualization
+    plt.title('Residual map')
+    plt.colorbar()
+    plt.savefig(args.output / f'{args.mode}_residual_map.png', dpi=300)
+
     print(f'{args.mode}: {np.nanmean(t_map)} +/- {np.nanstd(t_map)} ms')
     print(f'{args.mode} map saved as {args.output / f"{args.mode}_map.npz"}')
