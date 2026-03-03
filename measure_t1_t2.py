@@ -72,7 +72,6 @@ def load_dicom_series(folder):
         times.append((ti, te))
     images = np.stack(images)
 
-    print(times)
     return images, times
 
 def estimate_initial_t1(time_points, images):
@@ -196,7 +195,7 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Measure T1 and T2 from DICOM MRI images')
     parser.add_argument('folder', help='Folder containing DICOM images')
-    parser.add_argument('--mode', choices=['T1', 'T2'], default='T1', help='Relaxation type to measure')
+    parser.add_argument('--mode', choices=['T1', 'T2'], default='T1', help='Relaxation constant to measure')
     parser.add_argument('--output', type=pathlib.Path, default='.', help='Output path for the numpy arrays')
     parser.add_argument("--range", type=float, nargs=2, help="Display range for the relaxation map")
     parser.add_argument('--debug', action='store_true', help='Show intermediate results for debugging')
