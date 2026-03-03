@@ -34,7 +34,7 @@ efficiency ($k$) to -1 (assumed perfect inversion).
 
 ## Usage
 
-If you have (uv)[https://docs.astral.sh/uv/getting-started/installation/] installed and using a UNIX system (Linux,
+If you have [uv](https://docs.astral.sh/uv/getting-started/installation/) installed and using a UNIX system (Linux,
 macos) just run the script: `./measure_t1_t2.py ARGS`.
 
 For other platforms or if you don't use uv, the script has these dependencies:
